@@ -107,7 +107,7 @@ server <- function(input, output, session) {
 
     
     #fill in the output text for the titles, thank you message, and instructions
-    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions")
+    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email me with any questions")
     output$goodbye <- renderText("Thank you for participating! We have collected your answers. If you do not want to rate more, please close this page.")
     output$title1 <- renderText("Recording 1:")
     output$title2 <- renderText("Recording 2:")
