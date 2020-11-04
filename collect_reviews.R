@@ -1,5 +1,3 @@
-#Code to publish a Shiny App which can play audio and collect reviews on 88 recordings of "Happy Birthday", saving them to a Google Sheet
-
 library(shiny)
 library(DT)
 library(googlesheets4)
@@ -22,16 +20,40 @@ get_random_files <- function(select, total_files){
   return(ret_val)
 }
 
+
+#the below function was implemented after collecting many ratings - these recordings got 3 or fewer ratings, so I am going to force more people to hear these
+get_random_few_ratings <- function(select){
+  few_ratings <- c('recording0.mp3', 'recording13.mp3', 'recording17.mp3',
+                   'recording20.mp3', 'recording21.mp3', 'recording23.mp3',
+                   'recording28.mp3', 'recording33.mp3', 'recording34.mp3',
+                   'recording37.mp3', 'recording38.mp3', 'recording39.mp3',
+                   'recording43.mp3', 'recording47.mp3', 'recording51.mp3',
+                   'recording54.mp3', 'recording55.mp3', 'recording56.mp3',
+                   'recording6.mp3', 'recording60.mp3', 'recording61.mp3',
+                   'recording62.mp3', 'recording63.mp3', 'recording65.mp3',
+                   'recording66.mp3', 'recording68.mp3', 'recording70.mp3',
+                   'recording71.mp3', 'recording72.mp3', 'recording73.mp3',
+                   'recording75.mp3', 'recording76.mp3', 'recording77.mp3',
+                   'recording78.mp3', 'recording8.mp3', 'recording80.mp3',
+                   'recording81.mp3', 'recording83.mp3', 'recording84.mp3')
+  
+  
+  ret_val <- sample(few_ratings, 5, replace = F)
+  
+  return(ret_val)
+}
+
 #initialize the random recordings by pulling 5 files that the user will listen to
-random_recordings <- get_random_files(5,88)
+#random_recordings <- get_random_files(5,88)
+random_recordings <- get_random_few_ratings(5)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------
 #authentication
-gs4_auth(email = "my_email@gmail.com", path = "filepath_to_my_service_account")
+gs4_auth(email = "bwellen@carthage.edu", path = "./durable-surfer-290913-6f02a874b2ce.json")
 
 #----------------------------------------------------------------------------------------------------------------------------------------------
 #save the google sheet data 
-our_sheet <- gs4_get("link_to_my_google_sheet")
+our_sheet <- gs4_get("https://docs.google.com/spreadsheets/d/1swdg--kas3IDy6BLGL05hvVBjArQcsv10BaLO3iNthM/edit?usp=sharing")
 
 saveData <- function(data) {
   # Add the data as a new row
@@ -46,7 +68,7 @@ ui <- fluidPage(
     theme = shinytheme("spacelab"),
     useShinyjs(),
     shinyjs::hidden(textOutput(outputId = "goodbye")),
-    textOutput(outputId = "message_to_user"),
+    verbatimTextOutput(outputId = "message_to_user"),
     textInput(inputId = "name", label = "Full Name", value = ""),
     
     verbatimTextOutput(outputId = "title1"),
@@ -95,7 +117,7 @@ ui <- fluidPage(
    
 )
   
-#Create the server 
+#Create the server )
 server <- function(input, output, session) {
     next_recordings <- reactiveValues(recording_ids = random_recordings)
      
@@ -107,7 +129,7 @@ server <- function(input, output, session) {
 
     
     #fill in the output text for the titles, thank you message, and instructions
-    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email me with any questions")
+    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
     output$goodbye <- renderText("Thank you for participating! We have collected your answers. If you do not want to rate more, please close this page.")
     output$title1 <- renderText("Recording 1:")
     output$title2 <- renderText("Recording 2:")
@@ -170,7 +192,8 @@ server <- function(input, output, session) {
     #if they press start over, reset to the settings from the beginning
     observeEvent(input$start_over, {
       shinyjs::show(id = "name")
-      output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email me with any questions")
+      #updateTextInput(session = session, inputId = "name", label = "Name", value = "")
+      output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
       
       #Show the sliders again and set them back to 1
       shinyjs::show(id = "rating1")
@@ -198,7 +221,11 @@ server <- function(input, output, session) {
       shinyjs::show(id = "message_to_user")
       
       #select new random numbers 
-      next_recordings$recording_ids <- get_random_files(5,88)
+      #next_recordings$recording_ids <- get_random_files(5,88)
+      
+      #the below line is used after we were not getting enough ratings for some files
+      next_recordings$recording_ids <- get_random_few_ratings(5)
+      
       
       #Insert the 5 newly randomized recordings for the user to rate 
       insertUI(
