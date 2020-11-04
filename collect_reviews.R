@@ -49,11 +49,11 @@ random_recordings <- get_random_few_ratings(5)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------
 #authentication
-gs4_auth(email = "bwellen@carthage.edu", path = "./durable-surfer-290913-6f02a874b2ce.json")
+gs4_auth(email = "my_email@email.com", path = "my_service_account")
 
 #----------------------------------------------------------------------------------------------------------------------------------------------
 #save the google sheet data 
-our_sheet <- gs4_get("https://docs.google.com/spreadsheets/d/1swdg--kas3IDy6BLGL05hvVBjArQcsv10BaLO3iNthM/edit?usp=sharing")
+our_sheet <- gs4_get("my_google_sheet")
 
 saveData <- function(data) {
   # Add the data as a new row
@@ -129,7 +129,7 @@ server <- function(input, output, session) {
 
     
     #fill in the output text for the titles, thank you message, and instructions
-    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
+    output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email my_email@email.com with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
     output$goodbye <- renderText("Thank you for participating! We have collected your answers. If you do not want to rate more, please close this page.")
     output$title1 <- renderText("Recording 1:")
     output$title2 <- renderText("Recording 2:")
@@ -193,7 +193,7 @@ server <- function(input, output, session) {
     observeEvent(input$start_over, {
       shinyjs::show(id = "name")
       #updateTextInput(session = session, inputId = "name", label = "Name", value = "")
-      output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
+      output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email my_email@email.com with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
       
       #Show the sliders again and set them back to 1
       shinyjs::show(id = "rating1")
