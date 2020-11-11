@@ -22,7 +22,7 @@ This project is in progress - please see [my project proposal](/Project_Proposal
 * `Thesis_review_data.ipynb` continued to clean the data and began the attempt at a ML model that can predict enjoyability  
 
 ### Supporting Documents:  
-* 'Project_Proposal.pdf`  
+* `Project_Proposal.pdf`  
 
 
 
