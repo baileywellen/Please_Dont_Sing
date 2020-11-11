@@ -21,21 +21,14 @@ get_random_files <- function(select, total_files){
 }
 
 
-#the below function was implemented after collecting many ratings - these recordings got 3 or fewer ratings, so I am going to force more people to hear these
+#the below function was implemented after collecting many ratings - these recordings got fewer than 3 ratings, so I am going to force more people to hear these
 get_random_few_ratings <- function(select){
-  few_ratings <- c('recording0.mp3', 'recording13.mp3', 'recording17.mp3',
-                   'recording20.mp3', 'recording21.mp3', 'recording23.mp3',
-                   'recording28.mp3', 'recording33.mp3', 'recording34.mp3',
-                   'recording37.mp3', 'recording38.mp3', 'recording39.mp3',
-                   'recording43.mp3', 'recording47.mp3', 'recording51.mp3',
-                   'recording54.mp3', 'recording55.mp3', 'recording56.mp3',
-                   'recording6.mp3', 'recording60.mp3', 'recording61.mp3',
-                   'recording62.mp3', 'recording63.mp3', 'recording65.mp3',
-                   'recording66.mp3', 'recording68.mp3', 'recording70.mp3',
-                   'recording71.mp3', 'recording72.mp3', 'recording73.mp3',
-                   'recording75.mp3', 'recording76.mp3', 'recording77.mp3',
-                   'recording78.mp3', 'recording8.mp3', 'recording80.mp3',
-                   'recording81.mp3', 'recording83.mp3', 'recording84.mp3')
+  few_ratings <- c('recording0.mp3', 'recording17.mp3', 'recording20.mp3',
+                   'recording23.mp3', 'recording33.mp3', 'recording34.mp3',
+                   'recording39.mp3', 'recording6.mp3', 'recording60.mp3',
+                   'recording66.mp3', 'recording70.mp3', 'recording71.mp3',
+                   'recording72.mp3', 'recording75.mp3', 'recording76.mp3',
+                   'recording78.mp3', 'recording8.mp3', 'recording80.mp3')
   
   
   ret_val <- sample(few_ratings, 5, replace = F)
@@ -44,8 +37,8 @@ get_random_few_ratings <- function(select){
 }
 
 #initialize the random recordings by pulling 5 files that the user will listen to
-#random_recordings <- get_random_files(5,88)
-random_recordings <- get_random_few_ratings(5)
+random_recordings <- get_random_files(5,88)
+#random_recordings <- get_random_few_ratings(5)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------
 #authentication
@@ -192,7 +185,6 @@ server <- function(input, output, session) {
     #if they press start over, reset to the settings from the beginning
     observeEvent(input$start_over, {
       shinyjs::show(id = "name")
-      #updateTextInput(session = session, inputId = "name", label = "Name", value = "")
       output$message_to_user <- renderText("Thank you for volunteering to help with my thesis! Please listen to the recordings below and email bwellen@carthage.edu with any questions \nRate the following recordings on a scale of 1 (worst) to 10 (best)")
       
       #Show the sliders again and set them back to 1
@@ -221,10 +213,10 @@ server <- function(input, output, session) {
       shinyjs::show(id = "message_to_user")
       
       #select new random numbers 
-      #next_recordings$recording_ids <- get_random_files(5,88)
+      next_recordings$recording_ids <- get_random_files(5,88)
       
-      #the below line is used after we were not getting enough ratings for some files
-      next_recordings$recording_ids <- get_random_few_ratings(5)
+      #the below line was only used after we were not getting enough ratings for some files
+      #next_recordings$recording_ids <- get_random_few_ratings(5)
       
       
       #Insert the 5 newly randomized recordings for the user to rate 
