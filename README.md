@@ -12,7 +12,7 @@ This project is in progress - please see [my project proposal](/Project_Proposal
 * `current_ratings.csv` : Over 500 observations of ratings on how enjoyable the recordings are  
 * `complete_audio_freqs.csv` : a list of 1,000 datapoints for each recording - some recordings had to be cropped down to this length and some needed to be padded  
 * `audio_differences.csv` : All frequencies grouped into 25 averages (there are 25 distinct notes in "Happy Birthday"). Then, I calculated the difference between the first average and each subsequent average. These 25 columns represent the starting pitch and the change between that pitch and the following pitches. This data is what we use as the input features for the ML model.
-* www/ - the raw (anonymized) audio recordings submitted by volunteers  
+* `www/` - the raw (anonymized) audio recordings submitted by volunteers  
 
 ### Scripts and Code:  
 * `Collect_ratings.R` is the RShiny script that allowed volunteers to listen to recordings, rate them, and submit  
